@@ -5,39 +5,12 @@
 
 namespace akl {
 namespace details {
-// struct IS_POD_TYPE {};
-
-/**
- * \ingroup group_serialization
- *
- * \brief Tests if T is a POD type
- *
- * gl_is_pod<T>::value is true if T is a POD type (as determined by
- * boost::is_pod) or if T inherits from IS_POD_TYPE. gl_is_pod<T>::value
- * is false otherwise.
- */
-// template<typename T>
-// struct is_pod {
-//     BOOST_STATIC_CONSTANT(bool, value = (boost::type_traits::ice_or<
-//                               boost::is_scalar<T>::value,
-//                               boost::is_base_of<IS_POD_TYPE, T>::value>::value));
-// };
-
-// template<typename T>
-// struct is_pod_or_scaler {
-//     BOOST_STATIC_CONSTANT(bool, value =
-//                           (
-//                               boost::type_traits::ice_or<
-//                               boost::is_scalar<T>::value,
-//                               is_pod<T>::value>::value
-//                           ));
-// };
 
 template <typename T, bool IsIntegral>
 class atomic_impl {};
 
 template <typename T>
-class atomic_impl<T, true> /*: public IS_POD_TYPE*/ {
+class atomic_impl<T, true> {
 public:
     //! The current value of the atomic number
     volatile T value;
@@ -129,7 +102,7 @@ public:
 
 // specialization for floats and doubles
 template <typename T>
-class atomic_impl<T, false> /*: public IS_POD_TYPE*/ {
+class atomic_impl<T, false> {
 public:
     //! The current value of the atomic number
     volatile T value;

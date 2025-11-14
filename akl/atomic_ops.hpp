@@ -1,8 +1,7 @@
 #pragma once
 
-#include <stdint.h>
-
 #include "__sync_definitions.hpp"
+#include "definitions.hpp"
 
 namespace akl {
 

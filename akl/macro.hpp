@@ -1,20 +1,6 @@
 #pragma once
 
-#include <stdint.h>
-
 #include "atomic_ops.hpp"
-
-#define size_t unsigned long
-
-#ifdef __KERNEL__
-#warning("Building in kernel mode")
-
-#else
-#warning("Building in userspace mode")
-
-#endif
-
-
 
 #define ASSERT_TRUE(expr)                                                              \
     do {                                                                               \
