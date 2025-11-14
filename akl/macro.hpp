@@ -1,5 +1,7 @@
 #pragma once
 
+#if 0
+
 #include "atomic_ops.hpp"
 
 #define ASSERT_TRUE(expr)                                                              \
@@ -56,3 +58,5 @@ inline void force_store(T &x, const T &value) {
 }
 
 }
+
+#endif

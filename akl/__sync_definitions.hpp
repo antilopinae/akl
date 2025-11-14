@@ -2,6 +2,12 @@
 
 namespace akl {
 
+#ifdef __KERNEL__
+
+#define volatile
+
+#endif
+
 template <typename T>
 T add_and_fetch(volatile T* t, T u) {
 #ifdef __KERNEL__
@@ -55,5 +61,11 @@ bool bool_compare_and_swap(volatile T* t, T u, T h) {
     return ::__sync_bool_compare_and_swap(t, u, h);
 #endif
 }
+
+#ifdef __KERNEL__
+
+#undef volatile
+
+#endif
 
 }  // namespace akl

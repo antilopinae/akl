@@ -5,8 +5,7 @@
 
 #include <linux/types.h>
 #define uint64_t u64
-
-#define size_t unsigned long
+#define size_t u64
 
 #else
 #warning("Building in userspace mode")

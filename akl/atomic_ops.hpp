@@ -4,6 +4,11 @@
 #include "definitions.hpp"
 
 namespace akl {
+#ifdef __KERNEL__
+
+#define volatile
+
+#endif
 
 /*!
 * \ingroup util atomic instruction that is equivalent to the following:
@@ -112,4 +117,10 @@ template <typename T>
 T fetch_and_store(T& a, const T& newval) {
     return lock_test_and_set(&a, newval);
 }
+
+#ifdef __KERNEL__
+
+#undef volatile
+
+#endif
 }  // namespace akl

@@ -4,8 +4,13 @@
 #include "atomic_ops.hpp"
 
 namespace akl {
-namespace details {
+#ifdef __KERNEL__
 
+#define volatile
+
+#endif
+
+namespace details {
 template <typename T, bool IsIntegral>
 class atomic_impl {};
 
@@ -224,4 +229,10 @@ public:
     atomic(const T& value = T())
         : details::atomic_impl<T, /*boost::is_integral<T>::value*/ true>(value) {}
 };
+
+#ifdef __KERNEL__
+
+#undef volatile
+
+#endif
 }  // namespace akl
