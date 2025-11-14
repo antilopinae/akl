@@ -48,15 +48,6 @@ T lock_test_and_set(volatile T* t, T u) {
 }
 
 template <typename T>
-bool bool_compare_and_swap(T* t, T u, T h) {
-#ifdef __KERNEL__
-    return true;
-#else
-    return ::__sync_bool_compare_and_swap(t, u, h);
-#endif
-}
-
-template <typename T>
 bool bool_compare_and_swap(volatile T* t, T u, T h) {
 #ifdef __KERNEL__
     return true;
