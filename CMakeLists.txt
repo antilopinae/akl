@@ -1,16 +1,10 @@
 cmake_minimum_required(VERSION 3.26.0 FATAL_ERROR)
 
-project(parallel VERSION 1.0.0 LANGUAGES CXX)
+add_library(akl STATIC
+        atomic.cpp
+)
 
-find_package(Boost REQUIRED system)
-
-set(CMAKE_CXX_COMPILER g++)
-
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# Options to compile in kernel
-add_compile_options(
+target_compile_options(akl PRIVATE
         -Wall
         -fno-builtin
         -nostdlib
@@ -19,12 +13,7 @@ add_compile_options(
         -std=c++0x
 )
 
-add_library(parallel STATIC
-        thread.cpp
-        thread_group.cpp
-        thread_pool.cpp
-)
-
-target_link_libraries(parallel PRIVATE
-        Boost::system
+set(AKL_KERNEL_MODULE_SRC
+        ${CMAKE_CURRENT_SOURCE_DIR}/atomic.cpp
+        CACHE INTERNAL "Ant kernel lib resources for kernel module" FORCE
 )
