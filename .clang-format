@@ -1,70 +1,41 @@
 ---
-BasedOnStyle: Google
-Language: Cpp
+# Documentation: https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+# LLVM defaults: https://github.com/llvm/llvm-project/blob/llvmorg-20-init/clang/lib/Format/Format.cpp#L1412-L1630
+BasedOnStyle: LLVM
 
-AccessModifierOffset: 0
-IndentAccessModifiers: false
-NamespaceIndentation: None
-
-AlignAfterOpenBracket: Align
-AlignConsecutiveAssignments:
-  Enabled: true
-  PadOperators: true
-AlignOperands: Align
-
+AccessModifierOffset: -4
+AlignAfterOpenBracket: BlockIndent # version >= 14 required
+# AlignConsecutiveAssignments: true
+# AlignConsecutiveDeclarations: true
+AlignOperands: DontAlign
+AlignTrailingComments: false
 AllowShortFunctionsOnASingleLine: Empty
-AllowShortIfStatementsOnASingleLine: Never
-AllowShortLoopsOnASingleLine: true
-
 AlwaysBreakTemplateDeclarations: Yes
 BinPackArguments: false
 BinPackParameters: false
-
-BraceWrapping:
-  AfterClass: false
-  AfterControlStatement: Never
-  AfterFunction: false
-  BeforeElse: false
-  BeforeWhile: false
-  SplitEmptyFunction: true
-
-BreakBeforeBraces: WebKit
-BreakConstructorInitializers: BeforeComma
-BreakStringLiterals: true
-
-ColumnLimit: 120
-ConstructorInitializerIndentWidth: 4
-ContinuationIndentWidth: 4
-Cpp11BracedListStyle: true
+BreakAfterAttributes: Leave
+ColumnLimit: 88
 FixNamespaceComments: true
-
-IncludeBlocks: Regroup
-IncludeCategories:
-  - Regex: '^[<"].*[">]$'
-    Priority: 10
-  - Regex: '.*'
-    Priority: 20
-
-IndentCaseLabels: true
 IndentWidth: 4
 InsertBraces: true
-KeepEmptyLinesAtTheStartOfBlocks: false
-LambdaBodyIndentation: Signature
+Language: Cpp
 MaxEmptyLinesToKeep: 1
-
-PenaltyBreakComment: 300
-PenaltyExcessCharacter: 1000000
-
+PackConstructorInitializers: Never
 PointerAlignment: Left
-ReflowComments: true
-SortIncludes: CaseSensitive
-SpaceBeforeAssignmentOperators: true
-SpaceBeforeCtorInitializerColon: true
-SpaceBeforeInheritanceColon: true
-SpaceBeforeParens: ControlStatements
-SpacesInParentheses: false
+QualifierAlignment: Left
+ReferenceAlignment: Left
+SeparateDefinitionBlocks: Always # version >= 14 required
+SpacesBeforeTrailingComments: 2
 
-Standard: Auto
-TabWidth: 8
-UseTab: Never
-...
+# Adjust penalties to prefer break after open bracket
+PenaltyBreakAssignment: 100 # default: ?
+PenaltyBreakBeforeFirstCallParameter: 0 # default: 19
+PenaltyBreakComment: 300 # default: 300
+PenaltyBreakFirstLessLess: 120 # default: 120
+PenaltyBreakOpenParenthesis: 0 # default: 0
+# PenaltyBreakScopeResolution: 500 # default: 500
+PenaltyBreakString: 1000 # default: 1000
+PenaltyBreakTemplateDeclaration: 0 # default: ?
+PenaltyExcessCharacter: 1000000 # default: 1000000
+PenaltyIndentedWhitespace: 0 # default: 0
+PenaltyReturnTypeOnItsOwnLine: 200 # default: 60
