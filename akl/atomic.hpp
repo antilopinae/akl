@@ -6,18 +6,22 @@ namespace akl {
 
 namespace details {
 
+template <typename T, bool IsInteger>
+class atomic_impl;
+
 /* atomic for int */
-class atomic_int_impl {
+template <typename T>
+class atomic_impl<T, true> {
 public:
-    using T = int;
+    // using T = int;
     //! The current value of the atomic number
     volatile T value;
 
     //! Creates an atomic number with value "value"
-    atomic_int_impl(const T* value)
+    atomic_impl(const T* value)
         : value(*value) {}
 
-    atomic_int_impl(T value)
+    atomic_impl(T value)
         : value(value) {}
 
     //! Performs an atomic increment by 1, returning the new value
@@ -231,13 +235,16 @@ public:
 #endif
 }  // namespace details
 
-class atomic_int : public details::atomic_int_impl {
+template <typename T>
+class atomic : public details::atomic_impl<T, true> {
 public:
-    atomic_int(const int* value)
-        : details::atomic_int_impl(value) {}
+    atomic(const int* value)
+        : details::atomic_impl<T, true>(value) {}
 
-    atomic_int(int value)
-        : details::atomic_int_impl(value) {}
+    atomic(int value)
+        : details::atomic_impl<T, true>(value) {}
 };
+
+using atomic_int_ = atomic<int>;
 
 }  // namespace akl

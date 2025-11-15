@@ -37,3 +37,9 @@ set(AKL_INCLUDE_DIRS
         akl/
         CACHE INTERNAL "Ant kernel lib include dirs for kernel module" FORCE
 )
+
+set(AKL_TEMPLATE_NAMES
+        "atomic"
+        "atomic_impl"
+        CACHE INTERNAL "Ant kernel lib template names in cpp code" FORCE
+)
