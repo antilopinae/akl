@@ -4,7 +4,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-void kern_log(const char *fmt, ...);
+void akl_kern_log(const char *fmt, ...);
 #ifdef __cplusplus
 }
 #endif

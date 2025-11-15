@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.26.0 FATAL_ERROR)
 
 add_library(akl STATIC
         # kernel methods implementation
-        __sync.c
+        sync.c
         logger.c
 
         # cpp kernel library
@@ -21,7 +21,7 @@ target_compile_options(akl PRIVATE
 set(AKL_KERNEL_MODULE_SRC
         # kernel methods implementation
         ${CMAKE_CURRENT_SOURCE_DIR}/kern_lib.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/__sync.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/sync.c
         ${CMAKE_CURRENT_SOURCE_DIR}/logger.c
 
         # support cpp methods implementation

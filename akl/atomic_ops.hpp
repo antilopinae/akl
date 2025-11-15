@@ -1,5 +1,7 @@
 #pragma once
 
+#if 0
+
 #include "__sync_definitions.hpp"
 #include "definitions.hpp"
 
@@ -124,3 +126,5 @@ T fetch_and_store(T& a, const T& newval) {
 
 #endif
 }  // namespace akl
+
+#endif

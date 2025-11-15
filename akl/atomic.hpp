@@ -1,37 +1,33 @@
 #pragma once
 
-#include "__sync_definitions.hpp"
-#include "atomic_ops.hpp"
+#include "sync.h"
 
 namespace akl {
-#ifdef __KERNEL__
-
-#define volatile
-
-#endif
 
 namespace details {
-template <typename T, bool IsIntegral>
-class atomic_impl {};
 
-template <typename T>
-class atomic_impl<T, true> {
+/* atomic for int */
+class atomic_int_impl {
 public:
+    using T = int;
     //! The current value of the atomic number
     volatile T value;
 
     //! Creates an atomic number with value "value"
-    atomic_impl(const T& value = T())
+    atomic_int_impl(const T* value)
+        : value(*value) {}
+
+    atomic_int_impl(T value)
         : value(value) {}
 
     //! Performs an atomic increment by 1, returning the new value
     T inc() {
-        return add_and_fetch(&value, 1);
+        return akl_sync_add_and_fetch(static_cast<volatile int*>(&value), 1);
     }
 
     //! Performs an atomic decrement by 1, returning the new value
     T dec() {
-        return sub_and_fetch(&value, 1);
+        return akl_sync_sub_and_fetch(static_cast<volatile int*>(&value), 1);
     }
 
     //! Lvalue implicit cast
@@ -51,12 +47,16 @@ public:
 
     //! Performs an atomic increment by 'val', returning the new value
     T inc(const T val) {
-        return add_and_fetch(&value, val);
+        return akl_sync_add_and_fetch(
+            static_cast<volatile int*>(&value), static_cast<int>(val)
+        );
     }
 
     //! Performs an atomic decrement by 'val', returning the new value
     T dec(const T val) {
-        return sub_and_fetch(&value, val);
+        return akl_sync_sub_and_fetch(
+            static_cast<volatile int*>(&value), static_cast<int>(val)
+        );
     }
 
     //! Performs an atomic increment by 'val', returning the new value
@@ -71,12 +71,12 @@ public:
 
     //! Performs an atomic increment by 1, returning the old value
     T inc_ret_last() {
-        return fetch_and_add(&value, 1);
+        return akl_sync_fetch_and_add(static_cast<volatile int*>(&value), 1);
     }
 
     //! Performs an atomic decrement by 1, returning the old value
     T dec_ret_last() {
-        return fetch_and_sub(&value, 1);
+        return akl_sync_fetch_and_sub(static_cast<volatile int*>(&value), 1);
     }
 
     //! Performs an atomic increment by 1, returning the old value
@@ -91,21 +91,28 @@ public:
 
     //! Performs an atomic increment by 'val', returning the old value
     T inc_ret_last(const T val) {
-        return fetch_and_add(&value, val);
+        return akl_sync_fetch_and_add(
+            static_cast<volatile int*>(&value), static_cast<int>(val)
+        );
     }
 
     //! Performs an atomic decrement by 'val', returning the new value
     T dec_ret_last(const T val) {
-        return fetch_and_sub(&value, val);
+        return akl_sync_fetch_and_sub(
+            static_cast<volatile int*>(&value), static_cast<int>(val)
+        );
     }
 
     //! Performs an atomic exchange with 'val', returning the previous value
     T exchange(const T val) {
-        return lock_test_and_set(&value, val);
+        return akl_sync_lock_test_and_set(
+            static_cast<volatile int*>(&value), static_cast<int>(val)
+        );
     }
 };
 
-// specialization for floats and doubles
+#if 0
+/* atomic for floats and doubles */
 template <typename T>
 class atomic_impl<T, false> {
 public:
@@ -220,19 +227,17 @@ public:
         return lock_test_and_set(&value, val);
     }
 };
-}  // namespace details
-
-template <typename T>
-class atomic : public details::atomic_impl<T, /*boost::is_integral<T>::value*/ true> {
-public:
-    //! Creates an atomic number with value "value"
-    atomic(const T& value = T())
-        : details::atomic_impl<T, /*boost::is_integral<T>::value*/ true>(value) {}
-};
-
-#ifdef __KERNEL__
-
-#undef volatile
 
 #endif
+}  // namespace details
+
+class atomic_int : public details::atomic_int_impl {
+public:
+    atomic_int(const int* value)
+        : details::atomic_int_impl(value) {}
+
+    atomic_int(int value)
+        : details::atomic_int_impl(value) {}
+};
+
 }  // namespace akl

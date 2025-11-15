@@ -7,7 +7,7 @@
 
 #include "akl/logger.h"
 
-void kern_log(const char* fmt, ...) {
+void akl_kern_log(const char* fmt, ...) {
     va_list args;
     va_start(args, fmt);
 #ifdef __KERNEL__

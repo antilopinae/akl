@@ -11,27 +11,33 @@ extern "C" {
 
 /* memory */
 
-void kmemset(void *dst, int c, unsigned int len);
+void akl_memset(void* dst, int c, unsigned int len);
 
-void *kcmemcpy(void *dst, void *src, unsigned int len);
+void* akl_cmemcpy(void* dst, void* src, unsigned int len);
 
-void *kcmemmove(void *dst, void *src, unsigned int len);
+void* akl_cmemmove(void* dst, void* src, unsigned int len);
 
-int kcmemcmp(void *p1, void *p2, unsigned int len);
+int akl_cmemcmp(void* p1, void* p2, unsigned int len);
 
-void *kcmalloc(unsigned int size);
+void* akl_cmalloc(unsigned int size);
 
-void *kcrealloc(void *mem, unsigned int size);
+void* akl_crealloc(void* mem, unsigned int size);
 
-void kcfree(void *mem);
+void akl_cfree(void* mem);
 
 /* atomic */
 
 typedef struct {
     int counter;
-} katomic_t;
+} akl_atomic_t;
 
-int katomic_cmpxchg(katomic_t *v, int old_val, int new_val);
+int akl_atomic_xchg(akl_atomic_t* v, int new_val);
+
+int akl_atomic_cmpxchg(akl_atomic_t* v, int old_val, int new_val);
+
+int akl_atomic_add_return(int add_val, akl_atomic_t* v);
+
+int akl_atomic_sub_return(int sub_val, akl_atomic_t* v);
 
 #ifdef __cplusplus
 }
