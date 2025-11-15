@@ -7,6 +7,6 @@ int bool_compare_and_swap(volatile int* t, int expected, int desired) {
     int old = katomic_cmpxchg(atom, expected, desired);
     return old == expected;
 #else
-    return ::__sync_bool_compare_and_swap(t, expected, desired);
+    return __sync_bool_compare_and_swap(t, expected, desired);
 #endif
 }
