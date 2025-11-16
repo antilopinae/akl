@@ -9,6 +9,7 @@ namespace akl {
 
 namespace details {
 
+/* int types @only@ */
 template <typename T>
 class atomic_impl {
 public:
@@ -28,12 +29,14 @@ public:
 
     //! Performs an atomic increment by 1, returning the new value
     T inc() {
-        return akl_sync_add_and_fetch(static_cast<volatile int*>(&value), 1);
+        int res = akl_sync_add_and_fetch((volatile int*)&value, 1);
+        return *(T*)&res;
     }
 
     //! Performs an atomic decrement by 1, returning the new value
     T dec() {
-        return akl_sync_sub_and_fetch(static_cast<volatile int*>(&value), 1);
+        int res = akl_sync_sub_and_fetch((volatile int*)&value, 1);
+        return *(T*)&res;
     }
 
     //! Lvalue implicit cast
@@ -53,16 +56,14 @@ public:
 
     //! Performs an atomic increment by 'val', returning the new value
     T inc(const T val) {
-        return akl_sync_add_and_fetch(
-            static_cast<volatile int*>(&value), static_cast<int>(val)
-        );
+        int res = akl_sync_add_and_fetch((volatile int*)&value, *(int*)&val);
+        return *(T*)&res;
     }
 
     //! Performs an atomic decrement by 'val', returning the new value
     T dec(const T val) {
-        return akl_sync_sub_and_fetch(
-            static_cast<volatile int*>(&value), static_cast<int>(val)
-        );
+        int res = akl_sync_sub_and_fetch((volatile int*)&value, *(int*)&val);
+        return *(T*)&res;
     }
 
     //! Performs an atomic increment by 'val', returning the new value
@@ -77,12 +78,14 @@ public:
 
     //! Performs an atomic increment by 1, returning the old value
     T inc_ret_last() {
-        return akl_sync_fetch_and_add(static_cast<volatile int*>(&value), 1);
+        int res = akl_sync_fetch_and_add((volatile int*)&value, 1);
+        return *(T*)&res;
     }
 
     //! Performs an atomic decrement by 1, returning the old value
     T dec_ret_last() {
-        return akl_sync_fetch_and_sub(static_cast<volatile int*>(&value), 1);
+        int res = akl_sync_fetch_and_sub((volatile int*)&value, 1);
+        return *(T*)&res;
     }
 
     //! Performs an atomic increment by 1, returning the old value
@@ -97,23 +100,20 @@ public:
 
     //! Performs an atomic increment by 'val', returning the old value
     T inc_ret_last(const T val) {
-        return akl_sync_fetch_and_add(
-            static_cast<volatile int*>(&value), static_cast<int>(val)
-        );
+        int res = akl_sync_fetch_and_add((volatile int*)&value, *(int*)&val);
+        return *(T*)&res;
     }
 
     //! Performs an atomic decrement by 'val', returning the new value
     T dec_ret_last(const T val) {
-        return akl_sync_fetch_and_sub(
-            static_cast<volatile int*>(&value), static_cast<int>(val)
-        );
+        int res = akl_sync_fetch_and_sub((volatile int*)&value, *(int*)&val);
+        return *(T*)&res;
     }
 
     //! Performs an atomic exchange with 'val', returning the previous value
     T exchange(const T val) {
-        return akl_sync_lock_test_and_set(
-            static_cast<volatile int*>(&value), static_cast<int>(val)
-        );
+        int res = akl_sync_lock_test_and_set((volatile int*)&value, *(int*)&val);
+        return *(T*)&res;
     }
 };
 
