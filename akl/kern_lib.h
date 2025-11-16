@@ -1,12 +1,18 @@
-#ifndef KERN_LIB_H
-#define KERN_LIB_H
+#ifndef ANT_KERN_LIB_H
+#define ANT_KERN_LIB_H
 
 #ifdef __cplusplus
 // #include <cstdarg>
+#include <cstdint>
 
 extern "C" {
 #else
 // #include <stdarg.h>
+#ifdef __KERNEL_MODULE__
+#include <linux/types.h>
+#else
+#include <stdint.h>
+#endif
 #endif
 
 /* memory */
@@ -31,13 +37,51 @@ typedef struct {
     int counter;
 } akl_atomic_t;
 
+typedef uint32_t akl_u32;
+typedef uint64_t akl_u64;
+
+typedef struct {
+    union {
+        float f;
+        akl_u32 u;
+    };
+} akl_atomic_float_t;
+
+typedef struct {
+    union {
+        double d;
+        akl_u64 u;
+    };
+} akl_atomic_double_t;
+
+#ifndef __KERNEL_MODULE__
+static_assert(sizeof(float) == sizeof(akl_u32));
+static_assert(sizeof(double) == sizeof(akl_u64));
+#endif
+
 int akl_atomic_xchg(akl_atomic_t* v, int new_val);
+
+akl_atomic_float_t akl_atomic_xchg_float(
+    akl_atomic_float_t* v, akl_atomic_float_t new_val
+);
+
+akl_atomic_double_t akl_atomic_xchg_double(
+    akl_atomic_double_t* v, akl_atomic_double_t new_val
+);
 
 int akl_atomic_cmpxchg(akl_atomic_t* v, int old_val, int new_val);
 
 int akl_atomic_add_return(int add_val, akl_atomic_t* v);
 
 int akl_atomic_sub_return(int sub_val, akl_atomic_t* v);
+
+int akl_atomic_cmpxchg_float(
+    akl_atomic_float_t* ptr, akl_atomic_float_t oldv, akl_atomic_float_t newv
+);
+
+int akl_atomic_cmpxchg_double(
+    akl_atomic_double_t* ptr, akl_atomic_double_t oldv, akl_atomic_double_t newv
+);
 
 #ifdef __cplusplus
 }

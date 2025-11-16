@@ -1,5 +1,5 @@
-#ifndef LOGGER_H
-#define LOGGER_H
+#ifndef ANT_LOGGER_H
+#define ANT_LOGGER_H
 
 #ifdef __cplusplus
 extern "C" {
