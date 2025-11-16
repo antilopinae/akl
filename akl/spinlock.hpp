@@ -1,5 +1,7 @@
 #pragma once
 
+#if 0
+
 #include <cstdlib>
 #include <pthread.h>
 #include <semaphore.h>
@@ -187,3 +189,5 @@ namespace akl {
         }
     };
 }
+
+#endif

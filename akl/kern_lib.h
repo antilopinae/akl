@@ -1,18 +1,12 @@
 #ifndef ANT_KERN_LIB_H
 #define ANT_KERN_LIB_H
 
-#ifdef __cplusplus
-// #include <cstdarg>
-#include <cstdint>
+#include "types.h"
 
+#ifdef __cplusplus
 extern "C" {
+
 #else
-// #include <stdarg.h>
-#ifdef __KERNEL_MODULE__
-#include <linux/types.h>
-#else
-#include <stdint.h>
-#endif
 #endif
 
 /* memory */
@@ -36,9 +30,6 @@ void akl_cfree(void* mem);
 typedef struct {
     int counter;
 } akl_atomic_t;
-
-typedef uint32_t akl_u32;
-typedef uint64_t akl_u64;
 
 typedef struct {
     union {

@@ -4,6 +4,7 @@ add_library(akl STATIC
         # kernel methods implementation
         sync.c
         logger.c
+        pthread.c
 
         # cpp kernel library
         # atomic.cpp
@@ -22,6 +23,7 @@ set(AKL_KERNEL_MODULE_SRC
         # kernel methods implementation
         ${CMAKE_CURRENT_SOURCE_DIR}/kern_lib.c
         ${CMAKE_CURRENT_SOURCE_DIR}/sync.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/pthread.c
         ${CMAKE_CURRENT_SOURCE_DIR}/logger.c
 
         # support cpp methods implementation
