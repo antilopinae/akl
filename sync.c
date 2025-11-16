@@ -77,29 +77,26 @@ akl_atomic_float_t akl_sync_lock_test_and_set_float(
 #endif
 }
 
-// double akl_sync_lock_test_and_set_double(volatile double* t, double val) {
-// #ifdef __KERNEL_MODULE__
-//     akl_atomic_double_t* atom = (akl_atomic_double_t*)t;
-//
-//     akl_atomic_double_t new_val;
-//     new_val.d = val;
-//
-//     return akl_atomic_xchg_double(atom, new_val.u);
-// #else
-//     akl_atomic_double_t oldv, newv;
-//
-//     oldv.d = *t;
-//     newv.d = val;
-//
-//     akl_u64 prev;
-//     do {
-//         prev = oldv.u;
-//         oldv.u = __sync_val_compare_and_swap((volatile akl_u64*)t, prev, newv.u);
-//     } while (oldv.u != prev);
-//
-//     return *(double*)&prev;
-// #endif
-// }
+akl_atomic_double_t akl_sync_lock_test_and_set_double(
+    volatile akl_atomic_double_t* t, akl_atomic_double_t val
+) {
+#ifdef __KERNEL_MODULE__
+    return akl_atomic_xchg_double(t, val);
+#else
+    akl_atomic_double_t oldv, newv;
+
+    oldv.d = t->d;
+    newv.d = val.d;
+
+    akl_u64 prev;
+    do {
+        prev = oldv.u;
+        oldv.u = __sync_val_compare_and_swap((volatile akl_u64*)t, prev, newv.u);
+    } while (oldv.u != prev);
+
+    return *(akl_atomic_double_t*)&prev;
+#endif
+}
 
 int akl_atomic_compare_and_swap(volatile int* t, int expected, int desired) {
     return akl_sync_bool_compare_and_swap(t, expected, desired);
@@ -120,23 +117,20 @@ int akl_atomic_compare_and_swap_float(
 #endif
 }
 
-// int akl_atomic_compare_and_swap_double(
-//     volatile double* t, double expected, double desired
-// ) {
-// #ifdef __KERNEL_MODULE__
-//     akl_atomic_double_t* atom = (akl_atomic_double_t*)t;
-//
-//     const akl_u64* oldval_ptr = (const akl_u64*)&expected;
-//     const akl_u64* newval_ptr = (const akl_u64*)&desired;
-//
-//     return akl_atomic_cmpxchg_double(atom, *oldval_ptr, *newval_ptr);
-// #else
-//     volatile akl_u64* a_ptr = (volatile akl_u64*)t;
-//     const akl_u64* oldval_ptr = (const akl_u64*)&expected;
-//     const akl_u64* newval_ptr = (const akl_u64*)&desired;
-//     return __sync_bool_compare_and_swap(a_ptr, *oldval_ptr, *newval_ptr);
-// #endif
-// }
+int akl_atomic_compare_and_swap_double(
+    volatile akl_atomic_double_t* t,
+    akl_atomic_double_t expected,
+    akl_atomic_double_t desired
+) {
+#ifdef __KERNEL_MODULE__
+    return akl_atomic_cmpxchg_double(t, expected, desired);
+#else
+    volatile akl_u64* a_ptr = (volatile akl_u64*)t;
+    const akl_u64* oldval_ptr = (const akl_u64*)&expected;
+    const akl_u64* newval_ptr = (const akl_u64*)&desired;
+    return __sync_bool_compare_and_swap(a_ptr, *oldval_ptr, *newval_ptr);
+#endif
+}
 
 void akl_atomic_exchange(volatile int* a, int* b) {
     *b = akl_sync_lock_test_and_set(a, *b);
